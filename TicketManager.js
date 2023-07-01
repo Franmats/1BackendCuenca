@@ -21,30 +21,39 @@ class ProductManager {
             stock
         }
 
-        //VALIDACION QUE TODOS LOS ESPACIOS DE LOS PRDOCUTOS ESTEN LLENOS QUE TENGA TODOS LOS PARAMETROS
-        const espaciosVacios = this.products.map(e => Object.values(e)).map(e => e.includes(undefined)).includes(true)
-        if (espaciosVacios == true) {
-            return console.log("Hay espacios vacios en la lista de productos")
+        //VALIDACION QUE TODOS LOS ESPACIOS DE LOS PRDOCUTOS ESTEN LLENOS QUE TENGA TODOS LOS PARAMETROS (la idea es q si falta un parametro no lo pushee en el array de productos)
+        let espaciosVacios = () => {
+            let a = Object.values(producto).includes(undefined)// recorre el objeto producto convetido en array y asi no lo pushea al array principal
+            let bolean = a ? console.log("Hay espacios vacios") : false
+            return bolean
         }
+       
 
         // VALIDACION QUE TODOS LOS PRODUCTOS TENGAN DIFERENTE CODE
-        const codigoRepe = this.products.filter(e => e.code == code)
-        if (codigoRepe.length > 0  ) {
+        let codigoRepe = () => { 
+            let a = this.products.filter(e => e.code == code) 
+            let bolean = (a.length > 0) ? console.log("Hay un codigo repetido") :  false
+            return bolean
+        }
 
-            console.log("El codigo del nuevo producto esta repetido")
 
-        } else {
-            this.products.push(producto)
+        // CONDICION FINAL PARA QUE LOS PUSHEE AL ARRAY
+        if (espaciosVacios() === false && codigoRepe() === false) {
+
+           this.products.push(producto)
+
         }
     }
 
     //METODO PARA BUSCAR UN PRODUCTO SEGUN ID
     getProductById = (id) => {
+
         const productoFiltrado = this.products.filter(e => e.id == id)
-        if (productoFiltrado.length == 0) {
-            return console.log("Not Found")
+        
+        if (productoFiltrado.length > 0 && typeof id == "number") { //VALIDO CON EL TYPE OF QUE LA ENTRADA DEL PARAMETRO SE SOLO UN NUMERO
+            return console.log ("El producto buscado",productoFiltrado)
         } else {
-            return console.log ("El producto buscado",productoFiltrado)}
+            return console.log("Not Found") }
     }
 }
 
@@ -57,5 +66,5 @@ manager.addProduct("producto prueba 3 ", "Este es un producto prueba", 200, "Sin
 manager.addProduct("producto con code REPETIDO ", "Este es un producto prueba", 22, "Sin imagen", "abc123", 26) // PRODUCTO CON CODE REPETIDO
 console.log("Array con Productos", manager.getProducts())
 
-manager.getProductById(5)
+manager.getProductById(2)
 
